@@ -27,7 +27,7 @@ namespace elastic_search_engine
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("CI Test!");
             });
         }
     }
