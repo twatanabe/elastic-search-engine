@@ -9,13 +9,40 @@ import { Http } from '@angular/http';
 export class AppComponent implements OnInit {
   constructor(private _httpService: Http) {}
 
-  title = 'app';
+  item: string;
+  itemContent: {
+    Title: string,
+    Body: string,
+    Score: string,
+    AnswerCount: number
+  };
+  items: Array<any>;
+  total: number;
+  took: number;
+  message: string;
+  tag: string;
+  count: number;
+
+
   apiValues: string[] = [];
 
   ngOnInit() {
-    this.title = 'Code and push';
     this._httpService.get('/api/core').subscribe(values => {
       this.apiValues = values.json() as string[];
     });
+
+    this.item = 'item';
+    this.items = new Array<any>();
+    this.items.forEach(item => {
+      item.Title = 'title';
+      item.Body = 'body';
+      item.Score = 'score';
+      item.AnswerCount = 3;
+    });
+    this.total = 1;
+    this.took = 1582;
+    this.message = 'message';
+    this.tag = 'tag';
+    this.count = 1;
   }
 }
