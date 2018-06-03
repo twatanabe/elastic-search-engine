@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 
@@ -7,10 +9,22 @@ namespace ElasticSearchEngine
 {
     public class Startup
     {
+        public static IConfiguration Configuration { get; set; }
+
+        public Startup()
+        {
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            Configuration = builder.Build();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IConfiguration>(Configuration);
+
             services.AddMvc();
         }
 
@@ -29,10 +43,10 @@ namespace ElasticSearchEngine
                 }
             });
 
-            app.UseMvcWithDefaultRoute();
-
-            app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseDefaultFiles();
+
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
