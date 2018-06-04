@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ElasticSerchEngine.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ namespace ElasticSearchEngine
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            
 
             Configuration = builder.Build();
         }
@@ -24,6 +26,8 @@ namespace ElasticSearchEngine
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddTransient<IElasticConfig, ElasticConfig>();
+            services.AddTransient<IElasticIndexService, ElasticIndexService>();
 
             services.AddMvc();
         }
@@ -31,6 +35,11 @@ namespace ElasticSearchEngine
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("Hey Earth");
+            //}); 
+
             app.Use(async (context, next) =>
             {
                 await next();
@@ -43,8 +52,8 @@ namespace ElasticSearchEngine
                 }
             });
 
-            app.UseStaticFiles();
             app.UseDefaultFiles();
+            app.UseStaticFiles();
 
             app.UseMvcWithDefaultRoute();
         }
