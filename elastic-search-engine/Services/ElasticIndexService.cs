@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ElasticSerchEngine.Models;
+﻿using ElasticSerchEngine.Config;
 using Nest;
 
 namespace ElasticSerchEngine.Services
 {
-    public class ElasticIndexService : IElasticIndexService
+    public class ElasticIndexService : IIndexService
     {
         private readonly IElasticClient client;
         private readonly IElasticConfig _elasticConfig;

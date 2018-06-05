@@ -1,5 +1,4 @@
 ﻿using ElasticSerchEngine.Models;
-using System.Collections.Generic;
 
 namespace ElasticSerchEngine.Services
 {

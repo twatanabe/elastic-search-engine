@@ -1,7 +1,7 @@
-﻿using ElasticSerchEngine.Services;
+﻿using ElasticSerchEngine.Config;
+using ElasticSerchEngine.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
@@ -27,7 +27,7 @@ namespace ElasticSearchEngine
         {
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<IElasticConfig, ElasticConfig>();
-            services.AddTransient<IElasticIndexService, ElasticIndexService>();
+            services.AddTransient<IIndexService, ElasticIndexService>();
 
             services.AddMvc();
         }

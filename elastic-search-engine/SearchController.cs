@@ -1,8 +1,7 @@
 ﻿using ElasticSearchEngine.Services;
-using ElasticSerchEngine.Models;
 using ElasticSerchEngine.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 
@@ -13,11 +12,13 @@ namespace ElasticSearchEngine
     public class SearchController : ControllerBase
     {
         private readonly ElasticSearchService _searchService;
-        private readonly IElasticIndexService _indexService;
+        private readonly IIndexService _indexService;
+        private readonly ILogger _logger;
 
-        public SearchController(IElasticIndexService elasticIndexService)
+        public SearchController(IIndexService elasticIndexService, ILogger<SearchController> logger)
         {
             _indexService = elasticIndexService;
+            _logger = logger;
         }
 
         //// GET: api/search
@@ -40,6 +41,7 @@ namespace ElasticSearchEngine
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Index Fail \r\n{ex}");
                 return BadRequest($"Index Fail \r\n{ex}");
             }
 
@@ -50,6 +52,12 @@ namespace ElasticSearchEngine
         [Route("test")]
         public ActionResult Test()
         {
+            _logger.LogTrace("tracing...");
+            _logger.LogInformation("----- TEST SUCCESS -----");
+            _logger.LogDebug("Debug");
+            _logger.LogWarning("Waarrnnnnin yea!");
+            _logger.LogError("!!!!ERROR!!!!");
+            _logger.LogCritical("#critical");
             return Ok("Test Success");
         }
 

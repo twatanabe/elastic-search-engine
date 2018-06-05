@@ -1,4 +1,5 @@
-﻿using ElasticSerchEngine.Models;
+﻿using ElasticSerchEngine.Config;
+using ElasticSerchEngine.Models;
 using ElasticSerchEngine.Services;
 using Nest;
 

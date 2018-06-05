@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Nest;
 using System;
 
-namespace ElasticSerchEngine.Services
+namespace ElasticSerchEngine.Config
 {
     public class ElasticConfig : IElasticConfig
     {
@@ -18,7 +18,6 @@ namespace ElasticSerchEngine.Services
 
         public IElasticClient GetClient()
         {
-            _logger.LogInformation(1, "I Have The Power!!!!!!!!");
             Uri node = new Uri(ElasticsearchUrl);
             ConnectionSettings settings = new ConnectionSettings(node);
             settings.DefaultIndex(IndexName);
