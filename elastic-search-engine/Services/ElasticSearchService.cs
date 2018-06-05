@@ -9,7 +9,7 @@ namespace ElasticSearchEngine.Services
     {
         private readonly IElasticClient client;
 
-        public ElasticSearchService(ElasticConfig elasticConfig)
+        public ElasticSearchService(IElasticConfig elasticConfig)
         {
             client = elasticConfig.GetClient();
         }

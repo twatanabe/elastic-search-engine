@@ -1,4 +1,5 @@
 ﻿using ElasticSearchEngine.Services;
+using ElasticSerchEngine.Models;
 using ElasticSerchEngine.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,25 +12,36 @@ namespace ElasticSearchEngine
     [ApiController]
     public class SearchController : ControllerBase
     {
-        private readonly ElasticSearchService _searchService;
         private readonly IIndexService _indexService;
+        private readonly ISearchService<Post> _searchService;
         private readonly ILogger _logger;
 
-        public SearchController(IIndexService elasticIndexService, ILogger<SearchController> logger)
+        public SearchController(IIndexService indexService, ISearchService<Post> searchService, ILogger<SearchController> logger)
         {
-            _indexService = elasticIndexService;
+            _indexService = indexService;
+            _searchService = searchService;
             _logger = logger;
         }
 
-        //// GET: api/search
-        //[HttpGet]
-        //[Route("search")]
-        //public ActionResult<SearchResult<Post>> Search(string query, int page = 1, int pageSize = 10)
-        //{
-        //    //var results = service.Search(query, page, pageSize);
-        //    //return Ok(results);
-        //    return Ok();
-        //}
+        // GET: api/search
+        [HttpGet]
+        [Route("search")]
+        public ActionResult<SearchResult<Post>> Search(string query, int page = 1, int pageSize = 10)
+        {
+            SearchResult<Post> results = new SearchResult<Post>();
+            try
+            {
+                results = _searchService.Search(query, page, pageSize);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Search Fail \r\n{ex}");
+                return BadRequest($"Index Fail \r\n{ex}");
+            }
+
+            _logger.LogInformation($"Search Success");
+            return Ok(results);
+        }
 
         [HttpGet]
         [Route("index")]
@@ -45,6 +57,7 @@ namespace ElasticSearchEngine
                 return BadRequest($"Index Fail \r\n{ex}");
             }
 
+            _logger.LogInformation("Index Success");
             return Ok("Index Success");
         }
 
