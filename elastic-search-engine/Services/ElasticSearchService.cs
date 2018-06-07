@@ -16,16 +16,20 @@ namespace ElasticSearchEngine.Services
 
         public SearchResult<Post> Search(string query, int page, int pageSize)
         {
-            var result = client.Search<Post>(
-                x => x.Query(
-                    q => q.MultiMatch(
-                        mp => mp.Query(query))));
+            var result = client.Search<Post>(x => x
+                .Query(q => q
+                    .MultiMatch(mp => mp
+                        .Query(query)
+                            .Fields(f => f
+                                .Fields(f1 => f1.Title, f2 => f2.Body))))
+                .Size(pageSize));
 
             return new SearchResult<Post>
             {
                 Total = (int)result.Total,
                 Page = page,
-                Results = result.Documents
+                Results = result.Documents,
+                SearchMilliseconds = result.Took
             };
         }
     }

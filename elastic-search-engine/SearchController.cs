@@ -26,7 +26,7 @@ namespace ElasticSearchEngine
         // GET: api/search
         [HttpGet]
         [Route("search")]
-        public ActionResult<SearchResult<Post>> Search(string query, int page = 1, int pageSize = 10)
+        public ActionResult<SearchResult<Post>> Search(string query, int page = 1, int pageSize = 100)
         {
             SearchResult<Post> results = new SearchResult<Post>();
             try

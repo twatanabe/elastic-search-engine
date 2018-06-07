@@ -1,39 +1,38 @@
-<body ng-app="elasticsearch" ng-controller="searchController">
+<body ng-app="elasticsearch">
   <div class="container margin-top margin-bottom">
     <div class="row margin-bottom-small">
       <div class="col-md-12">
-        <form ng-submit="search()">
+        <form #searchForm="ngForm" (ngSubmit)="search()">
           <div class="input-group">
-            <input class="form-control" autofocus type="search" placeholder="Search for..." ng-model="query" uib-typeahead="item for item in autocomplete($viewValue)"
-              typeahead-on-select="typeaheadOnSelect($item, $model, $label, $event)">
+            <input class="form-control" autofocus type="text" placeholder="Search for..." [(ngModel)]="query" name="query">
             <span class="input-group-btn">
               <button class="btn btn-default btn-search" type="submit">
+                Search
                 <i class="glyphicon glyphicon-search"></i>
               </button>
             </span>
           </div>
-          <!-- /input-group -->
         </form>
       </div>
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div ng-show="suggested.length > 0">
+        <!-- <div ng-show="suggested.length > 0">
           <h4>Did you mean?</h4>
           <ul class="sugestion-list">
             <li ng-repeat="item in suggested">
               <a ng-click="">{{item}}</a>
             </li>
           </ul>
-        </div>
+        </div> -->
         <h4 ng-show="total > 0">Found
           <b>{{total}}</b> posts in
           <b>{{took}}</b> ms.</h4>
-        <h4 ng-show="message">{{message}}</h4>
+        <!-- <h4 ng-show="message">{{message}}</h4> -->
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-2 col-xs-3">
+      <!-- <div class="col-sm-2 col-xs-3">
         <div ng-show="total > 0">
           <h4>Posts by tag</h4>
           <ul class="category-list">
@@ -45,23 +44,23 @@
             </li>
           </ul>
         </div>
-      </div>
+      </div> -->
       <div class="col-xs-9 col-sm-offset-1">
-        <div class="row margin-bottom-small" ng-repeat="item in items" ng-hide="isLoading">
+        <ng-template class="row margin-bottom-small" ngFor let-result [ngForOf]="results" ng-hide="isLoading">
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-12">
                 <a ng-click="selectPost(item.Id)">
-                  <h3>{{item.Title}}</h3>
+                  <h3>{{result.title}}</h3>
                 </a>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12">
-                <p>{{item.Body}}</p>
+                <p>{{result.body}}</p>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-md-8">
                 <span ng-repeat="tag in item.Tags" class="label label-primary">{{tag}}</span>
               </div>
@@ -73,10 +72,13 @@
                   <span class="label label-info label-round">{{item.AnswerCount}}</span>
                 </small>
               </div>
-            </div>
+            </div> -->
           </div>
-        </div>
+        </ng-template>
       </div>
     </div>
   </div>
 </body>
+<!-- <ng-template class="row margin-bottom-small" ngFor let-result [ngForOf]="results" ng-hide="isLoading">
+  {{result.title}}
+</ng-template> -->

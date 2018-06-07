@@ -61,6 +61,7 @@ namespace ElasticSerchEngine.Services
                 var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
             }
         }
+
         private IEnumerable<Post> LoadPostsFromFile(string inputUrl)
         {
             using (XmlReader reader = XmlReader.Create(inputUrl))

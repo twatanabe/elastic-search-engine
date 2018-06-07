@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
+import { Result, SearchResultModel } from './Model/search-result-model';
+import { NgForm } from '@angular/forms';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,6 +13,7 @@ export class AppComponent implements OnInit {
   constructor(private _httpService: Http) {}
 
   item: string;
+  results: Array<Result>;
   itemContent: {
     Title: string,
     Body: string,
@@ -22,15 +26,12 @@ export class AppComponent implements OnInit {
   message: string;
   tag: string;
   count: number;
+  query: string;
 
 
-  apiValues: string[] = [];
+  public apiValues: SearchResultModel;
 
   ngOnInit() {
-    this._httpService.get('/api/core').subscribe(values => {
-      this.apiValues = values.json() as string[];
-    });
-
     this.item = 'item';
     this.items = new Array<any>();
     this.items.forEach(item => {
@@ -39,10 +40,23 @@ export class AppComponent implements OnInit {
       item.Score = 'score';
       item.AnswerCount = 3;
     });
-    this.total = 1;
-    this.took = 1582;
     this.message = 'message';
     this.tag = 'tag';
     this.count = 1;
+  }
+
+  search() {
+    this._httpService.get(`/api/search/search?query=${this.query}`).subscribe(values => {
+      this.apiValues = values.json() as SearchResultModel;
+
+      this.mapData();
+    });
+  }
+
+  mapData() {
+    this.total = this.apiValues.total;
+    this.took = this.apiValues.searchMilliseconds;
+
+    this.results = this.apiValues.results;
   }
 }

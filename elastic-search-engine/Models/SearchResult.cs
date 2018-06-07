@@ -7,5 +7,6 @@ namespace ElasticSerchEngine.Models
         public int Total { get; set; }
         public int Page { get; set; }
         public IEnumerable<T> Results { get; set; }
+        public long SearchMilliseconds { get; set; }
     }
 }
