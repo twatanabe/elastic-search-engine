@@ -8,5 +8,4 @@ Single Page App designed to query StackOverflow articles using,
 - Azure App Service
 - StackExchange Dumps
 
-![alt text](https://raw.githubusercontent.com/code-badger/elastic-search-engine/master/diagram.png
-
+![alt text](https://raw.githubusercontent.com/code-badger/elastic-search-engine/master/diagram.png)
