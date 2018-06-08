@@ -32,5 +32,11 @@ namespace ElasticSearchEngine.Services
                 SearchMilliseconds = result.Took
             };
         }
+
+        public Post Get(string id)
+        {
+            var result = client.Get<Post>(new DocumentPath<Post>(id));
+            return result.Source;
+        }
     }
 }

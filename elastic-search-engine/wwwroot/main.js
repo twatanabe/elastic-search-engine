@@ -41,7 +41,7 @@ module.exports = ".btn-search {\r\n  height: 34px;\r\n}\r\n\r\na{\r\n  cursor: p
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<body ng-app=\"elasticsearch\" ng-controller=\"searchController\">\n  <div class=\"container margin-top margin-bottom\">\n    <div class=\"row margin-bottom-small\">\n      <div class=\"col-md-12\">\n        <form ng-submit=\"search()\">\n          <div class=\"input-group\">\n            <input class=\"form-control\" autofocus type=\"search\" placeholder=\"Search for...\" ng-model=\"query\" uib-typeahead=\"item for item in autocomplete($viewValue)\"\n              typeahead-on-select=\"typeaheadOnSelect($item, $model, $label, $event)\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-default btn-search\" type=\"submit\">\n                <i class=\"glyphicon glyphicon-search\"></i>\n              </button>\n            </span>\n          </div>\n          <!-- /input-group -->\n        </form>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-md-12\">\n        <div ng-show=\"suggested.length > 0\">\n          <h4>Did you mean?</h4>\n          <ul class=\"sugestion-list\">\n            <li ng-repeat=\"item in suggested\">\n              <a ng-click=\"\">{{item}}</a>\n            </li>\n          </ul>\n        </div>\n        <h4 ng-show=\"total > 0\">Found\n          <b>{{total}}</b> posts in\n          <b>{{took}}</b> ms.</h4>\n        <h4 ng-show=\"message\">{{message}}</h4>\n      </div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-sm-2 col-xs-3\">\n        <div ng-show=\"total > 0\">\n          <h4>Posts by tag</h4>\n          <ul class=\"category-list\">\n            <li ng-repeat=\"(tag, count) in aggs\">\n              <span ng-class=\"{'label-primary label': isActive(tag)}\">\n                <a ng-click=\"toggleFilters(tag)\">{{tag}}</a>\n              </span>\n              <small class=\"pull-right\">({{count}})</small>\n            </li>\n          </ul>\n        </div>\n      </div>\n      <div class=\"col-xs-9 col-sm-offset-1\">\n        <div class=\"row margin-bottom-small\" ng-repeat=\"item in items\" ng-hide=\"isLoading\">\n          <div class=\"col-md-12\">\n            <div class=\"row\">\n              <div class=\"col-md-12\">\n                <a ng-click=\"selectPost(item.Id)\">\n                  <h3>{{item.Title}}</h3>\n                </a>\n              </div>\n            </div>\n            <div class=\"row\">\n              <div class=\"col-md-12\">\n                <p>{{item.Body}}</p>\n              </div>\n            </div>\n            <div class=\"row\">\n              <div class=\"col-md-8\">\n                <span ng-repeat=\"tag in item.Tags\" class=\"label label-primary\">{{tag}}</span>\n              </div>\n              <div class=\"col-md-4 text-right\">\n                <small>Votes:\n                  <span class=\"label label-info label-round\">{{item.Score}}</span>\n                </small>\n                <small>Answers:\n                  <span class=\"label label-info label-round\">{{item.AnswerCount}}</span>\n                </small>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</body>\n"
+module.exports = "<body ng-app=\"elasticsearch\">\n  <div class=\"container margin-top margin-bottom\">\n    <div class=\"row margin-bottom-small\">\n      <div class=\"col-md-12\">\n        <form #searchForm=\"ngForm\" (ngSubmit)=\"search()\">\n          <div class=\"input-group\">\n            <input class=\"form-control\" autofocus type=\"text\" placeholder=\"Search for...\" [(ngModel)]=\"query\" name=\"query\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-default btn-search\" type=\"submit\">\n                Search\n                <i class=\"glyphicon glyphicon-search\"></i>\n              </button>\n            </span>\n          </div>\n        </form>\n      </div>\n    </div>\n    <div class=\"row\" *ngIf=\"total != null\">\n      <div class=\"col-md-12\">\n        <!-- <div ng-show=\"suggested.length > 0\">\n          <h4>Did you mean?</h4>\n          <ul class=\"sugestion-list\">\n            <li ng-repeat=\"item in suggested\">\n              <a ng-click=\"\">{{item}}</a>\n            </li>\n          </ul>\n        </div> -->\n        <h4 ng-show=\"total > 0\">Found\n          <b>{{total}}</b> posts in\n          <b>{{took}}</b> ms.</h4>\n        <!-- <h4 ng-show=\"message\">{{message}}</h4> -->\n      </div>\n    </div>\n    <div class=\"row\">\n      <!-- <div class=\"col-sm-2 col-xs-3\">\n        <div ng-show=\"total > 0\">\n          <h4>Posts by tag</h4>\n          <ul class=\"category-list\">\n            <li ng-repeat=\"(tag, count) in aggs\">\n              <span ng-class=\"{'label-primary label': isActive(tag)}\">\n                <a ng-click=\"toggleFilters(tag)\">{{tag}}</a>\n              </span>\n              <small class=\"pull-right\">({{count}})</small>\n            </li>\n          </ul>\n        </div>\n      </div> -->\n      <div class=\"col-xs-9 col-sm-offset-1\">\n        <ng-template class=\"row margin-bottom-small\" ngFor let-result [ngForOf]=\"results\" ng-hide=\"isLoading\">\n          <div class=\"col-md-12\">\n            <div class=\"row\">\n              <div class=\"col-md-12\">\n                <a ng-click=\"selectPost(item.Id)\">\n                  <h3>{{result.title}}</h3>\n                </a>\n              </div>\n            </div>\n            <div class=\"row\">\n              <div class=\"col-md-12\">\n                <p>{{result.body}}</p>\n              </div>\n            </div>\n            <!-- <div class=\"row\">\n              <div class=\"col-md-8\">\n                <span ng-repeat=\"tag in item.Tags\" class=\"label label-primary\">{{tag}}</span>\n              </div>\n              <div class=\"col-md-4 text-right\">\n                <small>Votes:\n                  <span class=\"label label-info label-round\">{{item.Score}}</span>\n                </small>\n                <small>Answers:\n                  <span class=\"label label-info label-round\">{{item.AnswerCount}}</span>\n                </small>\n              </div>\n            </div> -->\n          </div>\n        </ng-template>\n      </div>\n    </div>\n  </div>\n</body>\n<!-- <ng-template class=\"row margin-bottom-small\" ngFor let-result [ngForOf]=\"results\" ng-hide=\"isLoading\">\n  {{result.title}}\n</ng-template> -->\n"
 
 /***/ }),
 
@@ -71,13 +71,8 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var AppComponent = /** @class */ (function () {
     function AppComponent(_httpService) {
         this._httpService = _httpService;
-        this.apiValues = [];
     }
     AppComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this._httpService.get('/api/core').subscribe(function (values) {
-            _this.apiValues = values.json();
-        });
         this.item = 'item';
         this.items = new Array();
         this.items.forEach(function (item) {
@@ -86,11 +81,22 @@ var AppComponent = /** @class */ (function () {
             item.Score = 'score';
             item.AnswerCount = 3;
         });
-        this.total = 1;
-        this.took = 1582;
         this.message = 'message';
         this.tag = 'tag';
         this.count = 1;
+        this.search();
+    };
+    AppComponent.prototype.search = function () {
+        var _this = this;
+        this._httpService.get("/api/search/search?query=" + this.query).subscribe(function (values) {
+            _this.apiValues = values.json();
+            _this.mapData();
+        });
+    };
+    AppComponent.prototype.mapData = function () {
+        this.total = this.apiValues.total;
+        this.took = this.apiValues.searchMilliseconds;
+        this.results = this.apiValues.results;
     };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({

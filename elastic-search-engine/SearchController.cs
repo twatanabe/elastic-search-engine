@@ -26,8 +26,13 @@ namespace ElasticSearchEngine
         // GET: api/search
         [HttpGet]
         [Route("search")]
-        public ActionResult<SearchResult<Post>> Search(string query, int page = 1, int pageSize = 100)
+        public ActionResult<SearchResult<Post>> Search(string query = "", int page = 1, int pageSize = 100)
         {
+            if (query == "undefined")
+            {
+                query = "";
+                _logger.LogTrace($"Undefined Search, return all");
+            }
             SearchResult<Post> results = new SearchResult<Post>();
             try
             {
@@ -74,9 +79,12 @@ namespace ElasticSearchEngine
             return Ok("Test Success");
         }
 
-        public IEnumerable<string> Get()
+        [HttpGet]
+        [Route("get")]
+        public ActionResult <string> Get(string id)
         {
-            return new string[] { "Hey", "Universe!!!!" };
+            return Ok(_searchService.Get(id));
+            //return new string[] { "Hey", "Universe!!!!" };
         }
     }
 }

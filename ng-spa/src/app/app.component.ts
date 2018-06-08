@@ -43,6 +43,8 @@ export class AppComponent implements OnInit {
     this.message = 'message';
     this.tag = 'tag';
     this.count = 1;
+
+    this.search();
   }
 
   search() {
