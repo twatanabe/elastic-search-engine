@@ -52,25 +52,23 @@ namespace ElasticSerchEngine.Services
 
                 var indexResponse = client.CreateIndex(_elasticConfig.IndexName, idx => indexDescriptor);
                 _logger.LogTrace($"Create Index - {indexResponse.IsValid}");
+
+
+                //var response = client.Bulk(b => b.Index<Post>(idx => idx.Document(new Post { })));
+
+                //_logger.LogTrace($"Bulk Index - {response.IsValid}");
+
+                int take = maxItems;
+                int batch = 1000;
+
+                var defaultXMLData = _azureBlobService.GetDefaultXMLData().Result;
+
+                foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
+                {
+                    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
+                }
+
             }
-
-            var response = client.Bulk(b => b.Index<Post>(idx => idx.Document(new Post { })));
-
-            _logger.LogTrace($"Bulk Index - {response.IsValid}");
-
-
-            int i = 0;
-            int take = maxItems;
-            int batch = 1000;
-
-            var defaultXMLData = _azureBlobService.GetDefaultXMLData().Result;
-
-            foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
-            {
-                i++;
-                var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
-            }
-
             //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
             //{
             //    i++;

@@ -21,6 +21,8 @@ namespace ElasticSearchEngine
             _indexService = indexService;
             _searchService = searchService;
             _logger = logger;
+
+            _indexService.CreateIndex(1000);
         }
 
         // GET: api/search
@@ -28,8 +30,6 @@ namespace ElasticSearchEngine
         [Route("search")]
         public ActionResult<SearchResult<Post>> Search(string query = "", int page = 1, int pageSize = 100)
         {
-            _indexService.CreateIndex(1000);
-
             if (query == "undefined")
             {
                 query = "";

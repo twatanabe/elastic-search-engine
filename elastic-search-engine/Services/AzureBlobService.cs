@@ -29,14 +29,14 @@ namespace ElasticSerchEngine.Services
             data = blob.DownloadTextAsync();
         }
 
-        public async Task<string> GetDefaultXMLData()
+        public Task<string> GetDefaultXMLData()
         {
             if (data == null)
             {
                 LoadDefaultXMLData();
             }
 
-            return data.Result;
+            return data;
         }
     }
 }
