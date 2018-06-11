@@ -28,6 +28,8 @@ namespace ElasticSearchEngine
         [Route("search")]
         public ActionResult<SearchResult<Post>> Search(string query = "", int page = 1, int pageSize = 100)
         {
+            _indexService.CreateIndex(1000);
+
             if (query == "undefined")
             {
                 query = "";
@@ -50,11 +52,11 @@ namespace ElasticSearchEngine
 
         [HttpGet]
         [Route("index")]
-        public ActionResult Index(string fileName, int maxItesm = 1000)
+        public ActionResult Index(int maxItesm = 1000)
         {
             try
             {
-                _indexService.CreateIndex(fileName, maxItesm);
+                _indexService.CreateIndex(maxItesm);
             }
             catch (Exception ex)
             {

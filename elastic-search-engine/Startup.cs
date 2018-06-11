@@ -29,6 +29,7 @@ namespace ElasticSearchEngine
         {
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<IElasticConfig, ElasticConfig>();
+            services.AddSingleton<IAzureBlobService, AzureBlobService>();
             services.AddTransient<IIndexService, ElasticIndexService>();
             services.AddTransient<ISearchService<Post>, ElasticSearchService>();
 

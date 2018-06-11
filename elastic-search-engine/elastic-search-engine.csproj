@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\astronomy.stackexchange.com\" />
+    <Compile Remove="Data\astronomy.stackexchange.com\**" />
+    <Content Remove="Data\astronomy.stackexchange.com\**" />
+    <EmbeddedResource Remove="Data\astronomy.stackexchange.com\**" />
+    <None Remove="Data\astronomy.stackexchange.com\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -16,7 +22,10 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.1.0" />
+    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />
     <PackageReference Include="NEST" Version="6.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,7 +5,9 @@ using Microsoft.Extensions.Logging;
 using Nest;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -15,12 +17,18 @@ namespace ElasticSerchEngine.Services
     {
         private readonly IElasticClient client;
         private readonly IElasticConfig _elasticConfig;
+        private readonly IAzureBlobService _azureBlobService;
         private readonly ILogger _logger;
 
-        public ElasticIndexService(IElasticConfig elasticConfig, ILogger<ElasticIndexService> logger)
+        public ElasticIndexService(
+            IElasticConfig elasticConfig, 
+            IAzureBlobService azureBlobService, 
+            ILogger<ElasticIndexService> logger)
         {
             _elasticConfig = elasticConfig;
             client = _elasticConfig.GetClient();
+
+            _azureBlobService = azureBlobService;
 
             _logger = logger;
         }
@@ -34,7 +42,7 @@ namespace ElasticSerchEngine.Services
             return response;
         }
 
-        public void CreateIndex(string fileName, int maxItems)
+        public void CreateIndex(int maxItems)
         {
             if (!IndexExists())
             {
@@ -55,16 +63,59 @@ namespace ElasticSerchEngine.Services
             int take = maxItems;
             int batch = 1000;
 
-            foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
+            var defaultXMLData = _azureBlobService.GetDefaultXMLData().Result;
+
+            foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
             {
                 i++;
                 var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
             }
+
+            //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
+            //{
+            //    i++;
+            //    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
+            //}
         }
 
-        private IEnumerable<Post> LoadPostsFromFile(string inputUrl)
+        //private IEnumerable<Post> LoadPostsFromFile(string inputUrl)
+        //{
+        //    using (XmlReader reader = XmlReader.Create(inputUrl))
+        //    {
+        //        reader.MoveToContent();
+        //        while (reader.Read())
+        //        {
+        //            if (reader.NodeType == XmlNodeType.Element && reader.Name == "row")
+        //            {
+        //                if (String.Equals(reader.GetAttribute("PostTypeId"), "1"))
+        //                {
+        //                    XElement el = XNode.ReadFrom(reader) as XElement;
+
+        //                    if (el != null)
+        //                    {
+        //                        Post post = new Post
+        //                        {
+        //                            Id = el.Attribute("Id").Value,
+        //                            Title = el.Attribute("Title") != null ? el.Attribute("Title").Value : "",
+        //                            Body = HtmlRemoval.StripTagsRegex(el.Attribute("Body").Value),
+        //                        };
+        //                        yield return post;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        private IEnumerable<Post> LoadPostsFromData(string data)
         {
-            using (XmlReader reader = XmlReader.Create(inputUrl))
+            string _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
+            if (data.StartsWith(_byteOrderMarkUtf8))
+            {
+                data = data.Remove(0, _byteOrderMarkUtf8.Length);
+            }
+
+            using (XmlReader reader = XmlReader.Create(new StringReader(data)))
             {
                 reader.MoveToContent();
                 while (reader.Read())
