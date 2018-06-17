@@ -5,7 +5,7 @@ services:
     image: elasticsearchengine
     build:
       context: .
-      dockerfile: elastic-search-engine/Dockerfile
+      dockerfile: Dockerfile
     networks:
         - reverseproxy
         - default
