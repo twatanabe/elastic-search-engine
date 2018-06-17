@@ -2,10 +2,8 @@ version: '3'
 
 services:
   elastic-search-engine:
-    image: elasticsearchengine
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: codebadger/elasticsearchengine
+    build: .
     networks:
         - reverseproxy
         - default
