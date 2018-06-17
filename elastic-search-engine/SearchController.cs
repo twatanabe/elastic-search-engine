@@ -30,11 +30,14 @@ namespace ElasticSearchEngine
         [Route("search")]
         public ActionResult<SearchResult<Post>> Search(string query = "", int page = 1, int pageSize = 100)
         {
+            _logger.LogInformation("Search Called");
+
             if (query == "undefined")
             {
                 query = "";
                 _logger.LogTrace($"Undefined Search, return all");
             }
+
             SearchResult<Post> results = new SearchResult<Post>();
             try
             {
