@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  elastic-search-engine:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
