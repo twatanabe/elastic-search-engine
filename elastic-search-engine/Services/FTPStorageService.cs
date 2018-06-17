@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -22,19 +23,27 @@ namespace ElasticSerchEngine.Services
 
         private void LoadDefaultXMLData()
         {
-            // Get the object used to communicate with the server.  
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(_config["xmlFTPFileUrl"]);
-            request.Method = WebRequestMethods.Ftp.DownloadFile;  
+            try
+            {
+                // Get the object used to communicate with the server.  
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(_config["xmlFTPFileUrl"]);
+                request.Method = WebRequestMethods.Ftp.DownloadFile;
 
-            FtpWebResponse response = (FtpWebResponse)request.GetResponse();  
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
 
-            Stream responseStream = response.GetResponseStream();  
-            StreamReader reader = new StreamReader(responseStream);
+                Stream responseStream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(responseStream);
 
-            xmlData = reader.ReadToEnd();
+                xmlData = reader.ReadToEnd();
 
-            reader.Close();  
-            response.Close();    
+                reader.Close();
+                response.Close();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to load XML file. {ex}");
+                throw ex;
+            }
         }
 
         public string GetDefaultXMLData()
@@ -42,6 +51,11 @@ namespace ElasticSerchEngine.Services
             if (xmlData == null)
             {
                 LoadDefaultXMLData();
+                _logger.LogTrace("Data featched and loaded");
+            }
+            else
+            {
+                _logger.LogTrace("Data already exists");
             }
 
             return xmlData;

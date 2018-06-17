@@ -50,37 +50,45 @@ namespace ElasticSerchEngine.Services
 
         public void CreateIndex(int maxItems)
         {
-            //if (!IndexExists())
-            //{
-                _logger.LogTrace("No Index Nope");
-                var indexDescriptor = new CreateIndexDescriptor(_elasticConfig.IndexName)
-                    .Mappings(ms => ms.Map<Post>(m => m.AutoMap()));
-
-                var indexResponse = client.CreateIndex(_elasticConfig.IndexName, idx => indexDescriptor);
-                _logger.LogTrace($"Create Index - {indexResponse.IsValid}");
-
-
-                //var response = client.Bulk(b => b.Index<Post>(idx => idx.Document(new Post { })));
-
-                //_logger.LogTrace($"Bulk Index - {response.IsValid}");
-
-                int take = maxItems;
-                int batch = 1000;
-
-                var defaultXMLData = _storageService.GetDefaultXMLData();
-
-                foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
+            if (!IndexExists())
+            {
+                try
                 {
-                    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
-                }
+                    _logger.LogTrace("No Index Nope");
+                    var indexDescriptor = new CreateIndexDescriptor(_elasticConfig.IndexName)
+                        .Mappings(ms => ms.Map<Post>(m => m.AutoMap()));
 
+                    var indexResponse = client.CreateIndex(_elasticConfig.IndexName, idx => indexDescriptor);
+                    _logger.LogTrace($"Create Index - {indexResponse.IsValid}");
+
+
+                    //var response = client.Bulk(b => b.Index<Post>(idx => idx.Document(new Post { })));
+
+                    //_logger.LogTrace($"Bulk Index - {response.IsValid}");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Failed creating Index. {ex}");
+                    throw ex;
+                }
             }
+
+            int take = maxItems;
+            int batch = 1000;
+
+            var defaultXMLData = _storageService.GetDefaultXMLData();
+
+            foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
+            {
+                var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
+            }
+
             //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
             //{
             //    i++;
             //    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
             //}
-        //}
+        }
 
         //private IEnumerable<Post> LoadPostsFromFile(string inputUrl)
         //{
