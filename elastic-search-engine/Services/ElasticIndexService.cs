@@ -17,20 +17,26 @@ namespace ElasticSerchEngine.Services
     {
         private readonly IElasticClient client;
         private readonly IElasticConfig _elasticConfig;
-        private readonly IAzureBlobService _azureBlobService;
+        private readonly IStorageService _storageService;
         private readonly ILogger _logger;
 
         public ElasticIndexService(
             IElasticConfig elasticConfig, 
-            IAzureBlobService azureBlobService, 
+            IStorageService storageService, 
             ILogger<ElasticIndexService> logger)
         {
             _elasticConfig = elasticConfig;
             client = _elasticConfig.GetClient();
 
-            _azureBlobService = azureBlobService;
+            _storageService = storageService;
 
             _logger = logger;
+        }
+
+        public bool CanBeQueried()
+        {
+            var response = client.Search<Post>(s => s);
+            return response.IsValid;
         }
 
         public bool IndexExists()
@@ -44,8 +50,8 @@ namespace ElasticSerchEngine.Services
 
         public void CreateIndex(int maxItems)
         {
-            if (!IndexExists())
-            {
+            //if (!IndexExists())
+            //{
                 _logger.LogTrace("No Index Nope");
                 var indexDescriptor = new CreateIndexDescriptor(_elasticConfig.IndexName)
                     .Mappings(ms => ms.Map<Post>(m => m.AutoMap()));
@@ -61,7 +67,7 @@ namespace ElasticSerchEngine.Services
                 int take = maxItems;
                 int batch = 1000;
 
-                var defaultXMLData = _azureBlobService.GetDefaultXMLData().Result;
+                var defaultXMLData = _storageService.GetDefaultXMLData();
 
                 foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
                 {
@@ -74,7 +80,7 @@ namespace ElasticSerchEngine.Services
             //    i++;
             //    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
             //}
-        }
+        //}
 
         //private IEnumerable<Post> LoadPostsFromFile(string inputUrl)
         //{

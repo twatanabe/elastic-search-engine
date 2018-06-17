@@ -78,6 +78,9 @@ namespace ElasticSearchEngine
             _logger.LogWarning("Waarrnnnnin yea!");
             _logger.LogError("!!!!ERROR!!!!");
             _logger.LogCritical("#critical");
+
+            _logger.LogInformation($"ElasticSearch - {_indexService.CanBeQueried()}");
+
             return Ok("Test Success");
         }
 

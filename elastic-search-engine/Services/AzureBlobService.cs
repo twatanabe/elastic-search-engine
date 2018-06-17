@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace ElasticSerchEngine.Services
 {
-    public class AzureBlobService : IAzureBlobService
+    public class AzureBlobService : IStorageService
     {
         private readonly IConfiguration _config;
         private readonly ILogger _logger;
-        private Task<string> data;
+        private string xmlData;
 
         public AzureBlobService(IConfiguration config, ILogger<AzureBlobService> logger)
         {
@@ -26,17 +26,17 @@ namespace ElasticSerchEngine.Services
             var container = blobClient.GetContainerReference("default");
             var blob = container.GetBlockBlobReference("Posts.xml");
 
-            data = blob.DownloadTextAsync();
+            xmlData = blob.DownloadTextAsync().Result;
         }
 
-        public Task<string> GetDefaultXMLData()
+        public string GetDefaultXMLData()
         {
-            if (data == null)
+            if (xmlData == null)
             {
                 LoadDefaultXMLData();
             }
 
-            return data;
+            return xmlData;
         }
     }
 }
