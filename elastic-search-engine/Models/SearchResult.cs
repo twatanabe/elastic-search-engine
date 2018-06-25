@@ -8,5 +8,6 @@ namespace ElasticSerchEngine.Models
         public int Page { get; set; }
         public IEnumerable<T> Results { get; set; }
         public long SearchMilliseconds { get; set; }
+        public Dictionary<string, long> AggregationsByTags { get; set; }
     }
 }

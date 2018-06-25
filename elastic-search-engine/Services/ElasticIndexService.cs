@@ -50,8 +50,8 @@ namespace ElasticSerchEngine.Services
 
         public void CreateIndex(int maxItems)
         {
-            if (!IndexExists())
-            {
+            //if (!IndexExists())
+            //{
                 try
                 {
                     _logger.LogTrace("No Index Nope");
@@ -81,7 +81,7 @@ namespace ElasticSerchEngine.Services
                 {
                     var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
                 }
-            }
+            //}
 
             //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
             //{
@@ -145,6 +145,14 @@ namespace ElasticSerchEngine.Services
                                     Id = el.Attribute("Id").Value,
                                     Title = el.Attribute("Title") != null ? el.Attribute("Title").Value : "",
                                     Body = HtmlRemoval.StripTagsRegex(el.Attribute("Body").Value),
+                                    Tags = el.Attribute("Tags") != null ? el.Attribute("Tags")
+                                                .Value.Replace("><", "|")
+                                                .Replace("<", "")
+                                                .Replace(">", "")
+                                                .Replace("&gt;&lt;", "|")
+                                                .Replace("&lt;", "")
+                                                .Replace("&gt;", "")
+                                                .Split('|') : null
                                 };
                                 yield return post;
                             }

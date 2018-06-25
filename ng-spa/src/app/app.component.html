@@ -32,6 +32,10 @@
       </div>
     </div>
     <div class="row">
+      {{aggs}}
+      <ng-template ngFor let-tags [ngForOf]="aggs">
+        <p>{{tags}}</p>
+      </ng-template>
       <!-- <div class="col-sm-2 col-xs-3">
         <div ng-show="total > 0">
           <h4>Posts by tag</h4>
@@ -46,33 +50,38 @@
         </div>
       </div> -->
       <div class="col-xs-9 col-sm-offset-1">
-        <ng-template class="row margin-bottom-small" ngFor let-result [ngForOf]="results" ng-hide="isLoading">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-12">
-                <a ng-click="selectPost(item.Id)">
-                  <h3>{{result.title}}</h3>
-                </a>
+        <ng-template ngFor let-result [ngForOf]="results" ng-hide="isLoading">
+          <div class="row margin-bottom-small">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <a ng-click="selectPost(item.Id)">
+                    <h3>{{result.title}}</h3>
+                  </a>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <p>{{result.body}}</p>
+              <div class="row">
+                <div class="col-md-12">
+                  <p>{{result.body}}</p>
+                </div>
               </div>
-            </div>
-            <!-- <div class="row">
-              <div class="col-md-8">
-                <span ng-repeat="tag in item.Tags" class="label label-primary">{{tag}}</span>
-              </div>
-              <div class="col-md-4 text-right">
+              <div class="row">
+                <div class="col-md-8">
+                  <ng-template ngFor let-tag [ngForOf]="result.tags">
+                    <span class="badge badge-primary">{{tag}}
+                    </span>
+                  </ng-template>
+                </div>
+                <!-- <div class="col-md-4 text-right">
                 <small>Votes:
                   <span class="label label-info label-round">{{item.Score}}</span>
                 </small>
                 <small>Answers:
                   <span class="label label-info label-round">{{item.AnswerCount}}</span>
                 </small>
+              </div> -->
               </div>
-            </div> -->
+            </div>
           </div>
         </ng-template>
       </div>

@@ -6,7 +6,7 @@ a{
   cursor: pointer;
 }
 
-.label{
+.badge{
   padding: 5px;
   margin-right: 1px;
 }
@@ -46,7 +46,7 @@ a{
   padding-top: 3px;
 }
 
-.category-list .label-primary a {
+.category-list .badge-primary a {
   color: #fff;
   font-weight: normal;
   font-size: 14px;
@@ -61,4 +61,3 @@ a{
   display: inline-block;
   padding-right: 15px;
 }
-

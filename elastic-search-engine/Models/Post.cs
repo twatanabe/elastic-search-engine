@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Nest;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,5 +11,8 @@ namespace ElasticSerchEngine.Models
         public string Id { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
+
+        [Text]
+        public IEnumerable<string> Tags { get; set; }
     }
 }

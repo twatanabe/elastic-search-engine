@@ -27,9 +27,10 @@ export class AppComponent implements OnInit {
   tag: string;
   count: number;
   query: string;
+  aggs: Map<string, number>;
 
 
-  public apiValues: SearchResultModel;
+  apiValues: SearchResultModel;
 
   ngOnInit() {
     this.item = 'item';
@@ -58,7 +59,7 @@ export class AppComponent implements OnInit {
   mapData() {
     this.total = this.apiValues.total;
     this.took = this.apiValues.searchMilliseconds;
-
+    this.aggs = this.apiValues.aggregationsByTags;
     this.results = this.apiValues.results;
   }
 }
