@@ -11,3 +11,5 @@ Single Page App designed to query StackOverflow articles using,
 
 
 ![alt text](https://raw.githubusercontent.com/code-badger/elastic-search-engine/master/diagram.png)
+
+![alt text](https://raw-githubusercontent.com/code-badger/elastic-search-engine/master/stack_exchange_xml.png)
