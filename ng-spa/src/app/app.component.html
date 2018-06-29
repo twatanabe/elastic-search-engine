@@ -32,10 +32,10 @@
       </div>
     </div>
     <div class="row">
-      {{aggs}}
+      <!-- {{aggs}}
       <ng-template ngFor let-tags [ngForOf]="aggs">
         <p>{{tags}}</p>
-      </ng-template>
+      </ng-template> -->
       <!-- <div class="col-sm-2 col-xs-3">
         <div ng-show="total > 0">
           <h4>Posts by tag</h4>
@@ -55,7 +55,7 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-12">
-                  <a ng-click="selectPost(item.Id)">
+                  <a (click)="selectPost(result.id)">
                     <h3>{{result.title}}</h3>
                   </a>
                 </div>
@@ -71,6 +71,9 @@
                     <span class="badge badge-primary">{{tag}}
                     </span>
                   </ng-template>
+                </div>
+                <div class="col-md-4 text-right">
+                  <span class="label label-info label-round">{{result.creationDate}}</span>
                 </div>
                 <!-- <div class="col-md-4 text-right">
                 <small>Votes:
@@ -88,6 +91,3 @@
     </div>
   </div>
 </body>
-<!-- <ng-template class="row margin-bottom-small" ngFor let-result [ngForOf]="results" ng-hide="isLoading">
-  {{result.title}}
-</ng-template> -->

@@ -145,6 +145,7 @@ namespace ElasticSerchEngine.Services
                                     Id = el.Attribute("Id").Value,
                                     Title = el.Attribute("Title") != null ? el.Attribute("Title").Value : "",
                                     Body = HtmlRemoval.StripTagsRegex(el.Attribute("Body").Value),
+                                    CreationDate = DateTime.Parse(el.Attribute("CreationDate").Value),
                                     Tags = el.Attribute("Tags") != null ? el.Attribute("Tags")
                                                 .Value.Replace("><", "|")
                                                 .Replace("<", "")
@@ -154,6 +155,7 @@ namespace ElasticSerchEngine.Services
                                                 .Replace("&gt;", "")
                                                 .Split('|') : null
                                 };
+                                post.Suggest = post.Tags;
                                 yield return post;
                             }
                         }

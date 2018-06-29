@@ -23,10 +23,10 @@ namespace ElasticSearchEngine.Services
                         .Query(query)
                             .Fields(f => f
                                 .Fields(f1 => f1.Title, f2 => f2.Body, f3 => f3.Tags))))
-                    //.Aggregations(a => a
-                    //    .Terms("by_tags", t => t
-                    //        .Field(f => f
-                    //            .Tags).Size(10)))
+                //.Aggregations(a => a
+                //    .Terms("by_tags", t => t
+                //        .Field(f => f
+                //            .Tags)))
                 .Size(pageSize));
 
             return new SearchResult<Post>

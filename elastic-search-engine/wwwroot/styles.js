@@ -48,7 +48,7 @@ module.exports = "/*!\n * Bootstrap v4.1.1 (https://getbootstrap.com/)\n * Copyr
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* You can add global styles to this file, and also import other style files */\n"
+module.exports = "/* You can add global styles to this file, and also import other style files */\n/* @import 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css';\n@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.css' */\n"
 
 /***/ }),
 
@@ -575,13 +575,13 @@ if(false) {}
 
 /***/ 2:
 /*!**********************************************************************************!*\
-  !*** multi ./node_modules/bootstrap/dist/css/bootstrap.min.css ./src/styles.css ***!
+  !*** multi ./src/styles.css ./node_modules/bootstrap/dist/css/bootstrap.min.css ***!
   \**********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Code\elastic-search-engine\ng-spa\node_modules\bootstrap\dist\css\bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
-module.exports = __webpack_require__(/*! C:\Code\elastic-search-engine\ng-spa\src\styles.css */"./src/styles.css");
+__webpack_require__(/*! C:\Code\elastic-search-engine\ng-spa\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Code\elastic-search-engine\ng-spa\node_modules\bootstrap\dist\css\bootstrap.min.css */"./node_modules/bootstrap/dist/css/bootstrap.min.css");
 
 
 /***/ })

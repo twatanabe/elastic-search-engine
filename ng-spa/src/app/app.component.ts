@@ -2,12 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { Result, SearchResultModel } from './Model/search-result-model';
-import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   constructor(private _httpService: Http) {}
@@ -15,10 +14,10 @@ export class AppComponent implements OnInit {
   item: string;
   results: Array<Result>;
   itemContent: {
-    Title: string,
-    Body: string,
-    Score: string,
-    AnswerCount: number
+    Title: string;
+    Body: string;
+    Score: string;
+    AnswerCount: number;
   };
   items: Array<any>;
   total: number;
@@ -28,7 +27,7 @@ export class AppComponent implements OnInit {
   count: number;
   query: string;
   aggs: Map<string, number>;
-
+  post: any;
 
   apiValues: SearchResultModel;
 
@@ -36,6 +35,7 @@ export class AppComponent implements OnInit {
     this.item = 'item';
     this.items = new Array<any>();
     this.items.forEach(item => {
+      item.
       item.Title = 'title';
       item.Body = 'body';
       item.Score = 'score';
@@ -49,11 +49,13 @@ export class AppComponent implements OnInit {
   }
 
   search() {
-    this._httpService.get(`/api/search/search?query=${this.query}`).subscribe(values => {
-      this.apiValues = values.json() as SearchResultModel;
+    this._httpService
+      .get(`/api/search/search?query=${this.query}`)
+      .subscribe(values => {
+        this.apiValues = values.json() as SearchResultModel;
 
-      this.mapData();
-    });
+        this.mapData();
+      });
   }
 
   mapData() {
@@ -61,5 +63,16 @@ export class AppComponent implements OnInit {
     this.took = this.apiValues.searchMilliseconds;
     this.aggs = this.apiValues.aggregationsByTags;
     this.results = this.apiValues.results;
+  }
+
+  selectPost(id: number) {
+    console.log(id);
+    this.findPost(id).subscribe(response => {
+      this.post = response.json() as Result;
+    });
+  }
+
+  findPost(id: number) {
+    return this._httpService.get(`/api/search/get?id=${id}`);
   }
 }

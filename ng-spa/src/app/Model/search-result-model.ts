@@ -10,4 +10,6 @@ export class Result {
   id: string;
   title: string;
   body: string;
+  tags: Array<string>;
+  creationDate: Date;
 }

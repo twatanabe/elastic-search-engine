@@ -89,10 +89,9 @@ namespace ElasticSearchEngine
 
         [HttpGet]
         [Route("get")]
-        public ActionResult <string> Get(string id)
+        public ActionResult<Post> Get(string id)
         {
             return Ok(_searchService.Get(id));
-            //return new string[] { "Hey", "Universe!!!!" };
         }
     }
 }
