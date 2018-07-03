@@ -50,14 +50,12 @@ namespace ElasticSerchEngine.Services
 
         public void CreateIndex(int maxItems)
         {
-            //if (!IndexExists())
-            //{
+            if (!IndexExists())
+            {
                 try
-                {
-                    _logger.LogTrace("No Index Nope");
+            {
                     var indexDescriptor = new CreateIndexDescriptor(_elasticConfig.IndexName)
                         .Mappings(ms => ms.Map<Post>(m => m.AutoMap()));
-
                     var indexResponse = client.CreateIndex(_elasticConfig.IndexName, idx => indexDescriptor);
                     _logger.LogTrace($"Create Index - {indexResponse.IsValid}");
 
@@ -81,7 +79,7 @@ namespace ElasticSerchEngine.Services
                 {
                     var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
                 }
-            //}
+            }
 
             //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
             //{
