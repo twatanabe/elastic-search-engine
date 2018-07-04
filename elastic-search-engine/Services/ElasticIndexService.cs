@@ -21,8 +21,8 @@ namespace ElasticSerchEngine.Services
         private readonly ILogger _logger;
 
         public ElasticIndexService(
-            IElasticConfig elasticConfig, 
-            IStorageService storageService, 
+            IElasticConfig elasticConfig,
+            IStorageService storageService,
             ILogger<ElasticIndexService> logger)
         {
             _elasticConfig = elasticConfig;
@@ -50,8 +50,8 @@ namespace ElasticSerchEngine.Services
 
         public void CreateIndex(int maxItems)
         {
-            //if (!IndexExists())
-            //{
+            if (!IndexExists())
+            {
                 try
                 {
                     var indexDescriptor = new CreateIndexDescriptor(_elasticConfig.IndexName)
@@ -73,13 +73,13 @@ namespace ElasticSerchEngine.Services
                 int take = maxItems;
                 int batch = 1000;
 
-            var defaultXMLData = _storageService.GetDefaultXMLData();
+                var defaultXMLData = _storageService.GetDefaultXMLData();
 
-            foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
-            {
-                var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
+                foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
+                {
+                    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
+                }
             }
-            //}
 
             //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
             //{
