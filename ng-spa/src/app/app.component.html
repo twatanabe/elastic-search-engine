@@ -25,32 +25,27 @@
             </li>
           </ul>
         </div> -->
-        <h4 ng-show="total > 0">Found
+        <h4 *ngIf="total > 0">Found
           <b>{{total}}</b> posts in
           <b>{{took}}</b> ms.</h4>
         <!-- <h4 ng-show="message">{{message}}</h4> -->
       </div>
     </div>
     <div class="row">
-      <!-- {{aggs}}
-      <ng-template ngFor let-tags [ngForOf]="aggs">
-        <p>{{tags}}</p>
-      </ng-template> -->
-      <!-- <div class="col-sm-2 col-xs-3">
-        <div ng-show="total > 0">
-          <h4>Posts by tag</h4>
-          <ul class="category-list">
-            <li ng-repeat="(tag, count) in aggs">
-              <span ng-class="{'label-primary label': isActive(tag)}">
-                <a ng-click="toggleFilters(tag)">{{tag}}</a>
-              </span>
-              <small class="pull-right">({{count}})</small>
-            </li>
-          </ul>
+        <div class="col-sm-2 col-xs-3">
+            <div *ngIf="total > 0">
+                <h4>Posts by tag</h4>
+                <ul class="category-list">
+                    <li *ngFor="let tag of aggKeys">
+                        <span ng-class="{'label-primary label': isActive(tag)}">
+                            <a (click)="toggleFilters(tag)">{{tag}}</a>
+                        </span><small class="pull-right"> ({{getValue(tag)}})</small>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div> -->
-      <div class="col-xs-9 col-sm-offset-1">
-        <ng-template ngFor let-result [ngForOf]="results" ng-hide="isLoading">
+      <div class="col-sm-9 col-sm-offset-1">
+        <ng-template ngFor let-result [ngForOf]="results" *ngIf="!isLoading">
           <div class="row margin-bottom-small">
             <div class="col-md-12">
               <div class="row">

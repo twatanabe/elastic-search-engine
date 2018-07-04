@@ -1,7 +1,7 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Http } from '@angular/http';
 
-import { Result, SearchResultModel } from './Model/search-result-model';
+import { Dict, Result, SearchResultModel } from './Model/search-result-model';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +9,7 @@ import { Result, SearchResultModel } from './Model/search-result-model';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private _httpService: Http) {}
+  constructor(private _httpService: HttpClient) {}
 
   item: string;
   results: Array<Result>;
@@ -26,17 +26,20 @@ export class AppComponent implements OnInit {
   tag: string;
   count: number;
   query: string;
-  aggs: Map<string, number>;
+  isLoading: boolean;
+
+  aggs: Dict;
+  aggKeys: Array<string> = [];
   post: any;
 
-  apiValues: SearchResultModel;
+  searchResults: SearchResultModel;
+  suggested: any;
 
   ngOnInit() {
     this.item = 'item';
     this.items = new Array<any>();
     this.items.forEach(item => {
-      item.
-      item.Title = 'title';
+      item.item.Title = 'title';
       item.Body = 'body';
       item.Score = 'score';
       item.AnswerCount = 3;
@@ -44,31 +47,74 @@ export class AppComponent implements OnInit {
     this.message = 'message';
     this.tag = 'tag';
     this.count = 1;
+    this.total = 0;
 
     this.search();
+    // this.suggest();
   }
 
   search() {
     this._httpService
       .get(`/api/search/search?query=${this.query}`)
       .subscribe(values => {
-        this.apiValues = values.json() as SearchResultModel;
+        this.isLoading = false;
+        this.searchResults = values as SearchResultModel;
 
         this.mapData();
       });
   }
 
+  searchByCategory(tags: Array<string>) {
+    const queryInfo = { query: '', categories: tags };
+
+    this._httpService
+      .get('/api/search/searchbycategory', { params: queryInfo })
+      .subscribe(values => {
+        this.isLoading = false;
+        this.searchResults = values as SearchResultModel;
+        this.mapData();
+      });
+  }
+
+  suggest() {
+    this._httpService
+      .get(`/api/search/suggest?query=${this.query}`)
+      .subscribe(values => {
+        this.suggested = values;
+      });
+  }
+
   mapData() {
-    this.total = this.apiValues.total;
-    this.took = this.apiValues.searchMilliseconds;
-    this.aggs = this.apiValues.aggregationsByTags;
-    this.results = this.apiValues.results;
+    this.total = this.searchResults.total;
+    this.took = this.searchResults.searchMilliseconds;
+
+    this.aggs = this.searchResults.aggregationsByTags;
+    this.aggKeys = [];
+    for (const key in this.aggs) {
+      if (this.aggs.hasOwnProperty(key)) {
+        this.aggKeys.push(key);
+      }
+    }
+
+    this.results = this.searchResults.results;
+  }
+
+  getValue(key: string) {
+    return this.aggs[key];
+  }
+
+  toggleFilters(tag: string) {
+    this.isLoading = true;
+    const index = this.aggKeys.indexOf(tag);
+    const tags = [tag];
+
+    this.searchByCategory(tags);
   }
 
   selectPost(id: number) {
     console.log(id);
     this.findPost(id).subscribe(response => {
-      this.post = response.json() as Result;
+      this.post = response as Result;
     });
   }
 

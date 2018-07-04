@@ -13,8 +13,9 @@ namespace ElasticSerchEngine.Models
         public string Body { get; set; }
         public DateTime? CreationDate { get; set; }
 
-        [Text]
+        [Keyword(Index = true)]
         public IEnumerable<string> Tags { get; set; }
+        [Completion]
         public IEnumerable<string> Suggest { get; set; }
     }
 }

@@ -50,17 +50,17 @@ namespace ElasticSerchEngine.Services
 
         public void CreateIndex(int maxItems)
         {
-            if (!IndexExists())
-            {
+            //if (!IndexExists())
+            //{
                 try
-            {
+                {
                     var indexDescriptor = new CreateIndexDescriptor(_elasticConfig.IndexName)
                         .Mappings(ms => ms.Map<Post>(m => m.AutoMap()));
                     var indexResponse = client.CreateIndex(_elasticConfig.IndexName, idx => indexDescriptor);
                     _logger.LogTrace($"Create Index - {indexResponse.IsValid}");
 
 
-                    //var response = client.Bulk(b => b.Index<Post>(idx => idx.Document(new Post { })));
+                    var response = client.CreateIndex(_elasticConfig.IndexName, i => indexDescriptor);
 
                     //_logger.LogTrace($"Bulk Index - {response.IsValid}");
                 }
@@ -73,13 +73,13 @@ namespace ElasticSerchEngine.Services
                 int take = maxItems;
                 int batch = 1000;
 
-                var defaultXMLData = _storageService.GetDefaultXMLData();
+            var defaultXMLData = _storageService.GetDefaultXMLData();
 
-                foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
-                {
-                    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
-                }
+            foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
+            {
+                var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
             }
+            //}
 
             //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
             //{

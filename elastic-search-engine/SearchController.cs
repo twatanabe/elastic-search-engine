@@ -54,6 +54,19 @@ namespace ElasticSearchEngine
         }
 
         [HttpGet]
+        [Route("searchbycategory")]
+        public ActionResult<SearchResult<Post>> SearchByCategory([FromQuery]SearchInfo json)
+        {
+            string query = json.query;
+            if (query == "undefined")
+            {
+                query = "";
+            }
+            var categories = (IEnumerable<string>)json.categories;
+            return Ok(_searchService.SearchByCategory(query, categories, 1, 10));
+        }
+
+        [HttpGet]
         [Route("index")]
         public ActionResult Index(int maxItesm = 1000)
         {
@@ -69,6 +82,20 @@ namespace ElasticSearchEngine
 
             _logger.LogInformation("Index Success");
             return Ok("Index Success");
+        }
+
+        [HttpGet]
+        [Route("autocomplete")]
+        public ActionResult Autocomplete(string q)
+        {
+            return Ok(_searchService.Autocomplete(q));
+        }
+
+        [HttpGet]
+        [Route("suggest")]
+        public ActionResult Suggest(string q)
+        {
+            return Ok(_searchService.Suggest(q));
         }
 
         [HttpGet]
