@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<body ng-app=\"elasticsearch\">\n  <div class=\"container margin-top margin-bottom\">\n    <div class=\"row margin-bottom-small\">\n      <div class=\"col-md-12\">\n        <form #searchForm=\"ngForm\" (ngSubmit)=\"search()\">\n          <div class=\"input-group\">\n            <input class=\"form-control\" autofocus type=\"text\" placeholder=\"Search for...\" [(ngModel)]=\"query\" name=\"query\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-default btn-search\" type=\"submit\">\n                Search\n                <i class=\"glyphicon glyphicon-search\"></i>\n              </button>\n            </span>\n          </div>\n        </form>\n      </div>\n    </div>\n    <div class=\"row\" *ngIf=\"total != null\">\n      <div class=\"col-md-12\">\n        <!-- <div ng-show=\"suggested.length > 0\">\n          <h4>Did you mean?</h4>\n          <ul class=\"sugestion-list\">\n            <li ng-repeat=\"item in suggested\">\n              <a ng-click=\"\">{{item}}</a>\n            </li>\n          </ul>\n        </div> -->\n        <h4 ng-show=\"total > 0\">Found\n          <b>{{total}}</b> posts in\n          <b>{{took}}</b> ms.</h4>\n        <!-- <h4 ng-show=\"message\">{{message}}</h4> -->\n      </div>\n    </div>\n    <div class=\"row\">\n      <!-- {{aggs}}\n      <ng-template ngFor let-tags [ngForOf]=\"aggs\">\n        <p>{{tags}}</p>\n      </ng-template> -->\n      <!-- <div class=\"col-sm-2 col-xs-3\">\n        <div ng-show=\"total > 0\">\n          <h4>Posts by tag</h4>\n          <ul class=\"category-list\">\n            <li ng-repeat=\"(tag, count) in aggs\">\n              <span ng-class=\"{'label-primary label': isActive(tag)}\">\n                <a ng-click=\"toggleFilters(tag)\">{{tag}}</a>\n              </span>\n              <small class=\"pull-right\">({{count}})</small>\n            </li>\n          </ul>\n        </div>\n      </div> -->\n      <div class=\"col-xs-9 col-sm-offset-1\">\n        <ng-template ngFor let-result [ngForOf]=\"results\" ng-hide=\"isLoading\">\n          <div class=\"row margin-bottom-small\">\n            <div class=\"col-md-12\">\n              <div class=\"row\">\n                <div class=\"col-md-12\">\n                  <a (click)=\"selectPost(result.id)\">\n                    <h3>{{result.title}}</h3>\n                  </a>\n                </div>\n              </div>\n              <div class=\"row\">\n                <div class=\"col-md-12\">\n                  <p>{{result.body}}</p>\n                </div>\n              </div>\n              <div class=\"row\">\n                <div class=\"col-md-8\">\n                  <ng-template ngFor let-tag [ngForOf]=\"result.tags\">\n                    <span class=\"badge badge-primary\">{{tag}}\n                    </span>\n                  </ng-template>\n                </div>\n                <div class=\"col-md-4 text-right\">\n                  <span class=\"label label-info label-round\">{{result.creationDate}}</span>\n                </div>\n                <!-- <div class=\"col-md-4 text-right\">\n                <small>Votes:\n                  <span class=\"label label-info label-round\">{{item.Score}}</span>\n                </small>\n                <small>Answers:\n                  <span class=\"label label-info label-round\">{{item.AnswerCount}}</span>\n                </small>\n              </div> -->\n              </div>\n            </div>\n          </div>\n        </ng-template>\n      </div>\n    </div>\n  </div>\n</body>\n"
+module.exports = "<body ng-app=\"elasticsearch\">\n  <div class=\"container margin-top margin-bottom\">\n    <div class=\"row margin-bottom-small\">\n      <div class=\"col-md-12\">\n        <form #searchForm=\"ngForm\" (ngSubmit)=\"search()\">\n          <div class=\"input-group\">\n            <input class=\"form-control\" autofocus type=\"text\" placeholder=\"Search for...\" [(ngModel)]=\"query\" name=\"query\">\n            <span class=\"input-group-btn\">\n              <button class=\"btn btn-default btn-search\" type=\"submit\">\n                Search\n                <i class=\"glyphicon glyphicon-search\"></i>\n              </button>\n            </span>\n          </div>\n        </form>\n      </div>\n    </div>\n    <div class=\"row\" *ngIf=\"total != null\">\n      <div class=\"col-md-12\">\n        <!-- <div ng-show=\"suggested.length > 0\">\n          <h4>Did you mean?</h4>\n          <ul class=\"sugestion-list\">\n            <li ng-repeat=\"item in suggested\">\n              <a ng-click=\"\">{{item}}</a>\n            </li>\n          </ul>\n        </div> -->\n        <h4 *ngIf=\"total > 0\">Found\n          <b>{{total}}</b> posts in\n          <b>{{took}}</b> ms.</h4>\n        <!-- <h4 ng-show=\"message\">{{message}}</h4> -->\n      </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col-sm-2 col-xs-3\">\n            <div *ngIf=\"total > 0\">\n                <h4>Posts by tag</h4>\n                <ul class=\"category-list\">\n                    <li *ngFor=\"let tag of aggKeys\">\n                        <span ng-class=\"{'label-primary label': isActive(tag)}\">\n                            <a (click)=\"toggleFilters(tag)\">{{tag}}</a>\n                        </span><small class=\"pull-right\"> ({{getValue(tag)}})</small>\n                    </li>\n                </ul>\n            </div>\n        </div>\n      <div class=\"col-sm-9 col-sm-offset-1\">\n        <ng-template ngFor let-result [ngForOf]=\"results\" *ngIf=\"!isLoading\">\n          <div class=\"row margin-bottom-small\">\n            <div class=\"col-md-12\">\n              <div class=\"row\">\n                <div class=\"col-md-12\">\n                  <a (click)=\"selectPost(result.id)\">\n                    <h3>{{result.title}}</h3>\n                  </a>\n                </div>\n              </div>\n              <div class=\"row\">\n                <div class=\"col-md-12\">\n                  <p>{{result.body}}</p>\n                </div>\n              </div>\n              <div class=\"row\">\n                <div class=\"col-md-8\">\n                  <ng-template ngFor let-tag [ngForOf]=\"result.tags\">\n                    <span class=\"badge badge-primary\">{{tag}}\n                    </span>\n                  </ng-template>\n                </div>\n                <div class=\"col-md-4 text-right\">\n                  <span class=\"label label-info label-round\">{{result.creationDate}}</span>\n                </div>\n                <!-- <div class=\"col-md-4 text-right\">\n                <small>Votes:\n                  <span class=\"label label-info label-round\">{{item.Score}}</span>\n                </small>\n                <small>Answers:\n                  <span class=\"label label-info label-round\">{{item.AnswerCount}}</span>\n                </small>\n              </div> -->\n              </div>\n            </div>\n          </div>\n        </ng-template>\n      </div>\n    </div>\n  </div>\n</body>\n"
 
 /***/ }),
 
@@ -55,8 +55,8 @@ module.exports = ".btn-search {\n  margin-left: 10px;\n  height: 50px; }\n\na {\
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -71,13 +71,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var AppComponent = /** @class */ (function () {
     function AppComponent(_httpService) {
         this._httpService = _httpService;
+        this.aggKeys = [];
     }
     AppComponent.prototype.ngOnInit = function () {
         this.item = 'item';
         this.items = new Array();
         this.items.forEach(function (item) {
-            item.
-                item.Title = 'title';
+            item.item.Title = 'title';
             item.Body = 'body';
             item.Score = 'score';
             item.AnswerCount = 3;
@@ -85,40 +85,77 @@ var AppComponent = /** @class */ (function () {
         this.message = 'message';
         this.tag = 'tag';
         this.count = 1;
+        this.total = 0;
         this.search();
+        // this.suggest();
     };
     AppComponent.prototype.search = function () {
         var _this = this;
         this._httpService
             .get("/api/search/search?query=" + this.query)
             .subscribe(function (values) {
-            _this.apiValues = values.json();
+            _this.isLoading = false;
+            _this.searchResults = values;
             _this.mapData();
         });
     };
+    AppComponent.prototype.searchByCategory = function (tags) {
+        var _this = this;
+        var queryInfo = { query: '', categories: tags };
+        this._httpService
+            .get('/api/search/searchbycategory', { params: queryInfo })
+            .subscribe(function (values) {
+            _this.isLoading = false;
+            _this.searchResults = values;
+            _this.mapData();
+        });
+    };
+    AppComponent.prototype.suggest = function () {
+        var _this = this;
+        this._httpService
+            .get("/api/search/suggest?query=" + this.query)
+            .subscribe(function (values) {
+            _this.suggested = values;
+        });
+    };
     AppComponent.prototype.mapData = function () {
-        this.total = this.apiValues.total;
-        this.took = this.apiValues.searchMilliseconds;
-        this.aggs = this.apiValues.aggregationsByTags;
-        this.results = this.apiValues.results;
+        this.total = this.searchResults.total;
+        this.took = this.searchResults.searchMilliseconds;
+        this.aggs = this.searchResults.aggregationsByTags;
+        this.aggKeys = [];
+        for (var key in this.aggs) {
+            if (this.aggs.hasOwnProperty(key)) {
+                this.aggKeys.push(key);
+            }
+        }
+        this.results = this.searchResults.results;
+    };
+    AppComponent.prototype.getValue = function (key) {
+        return this.aggs[key];
+    };
+    AppComponent.prototype.toggleFilters = function (tag) {
+        this.isLoading = true;
+        var index = this.aggKeys.indexOf(tag);
+        var tags = [tag];
+        this.searchByCategory(tags);
     };
     AppComponent.prototype.selectPost = function (id) {
         var _this = this;
         console.log(id);
         this.findPost(id).subscribe(function (response) {
-            _this.post = response.json();
+            _this.post = response;
         });
     };
     AppComponent.prototype.findPost = function (id) {
         return this._httpService.get("/api/search/get?id=" + id);
     };
     AppComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.scss */ "./src/app/app.component.scss")]
         }),
-        __metadata("design:paramtypes", [_angular_http__WEBPACK_IMPORTED_MODULE_1__["Http"]])
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -139,9 +176,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppModule", function() { return AppModule; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
-/* harmony import */ var _angular_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/http */ "./node_modules/@angular/http/fesm5/http.js");
-/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -158,14 +195,14 @@ var AppModule = /** @class */ (function () {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
-            declarations: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]],
+            declarations: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]],
             imports: [
-                _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__["BrowserModule"],
+                _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormsModule"],
-                _angular_http__WEBPACK_IMPORTED_MODULE_2__["HttpModule"]
+                _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"]
             ],
             providers: [],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
