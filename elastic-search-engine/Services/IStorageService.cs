@@ -6,6 +6,7 @@ namespace ElasticSerchEngine.Services
     {
 
         //void LoadDefaultXMLData();
+        void DeleteXMLDataMemory();
         string GetDefaultXMLData();
     }
 }

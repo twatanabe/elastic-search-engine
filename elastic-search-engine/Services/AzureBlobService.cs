@@ -29,6 +29,11 @@ namespace ElasticSerchEngine.Services
             xmlData = blob.DownloadTextAsync().Result;
         }
 
+        public void DeleteXMLDataMemory()
+        {
+            xmlData = null;
+        }
+
         public string GetDefaultXMLData()
         {
             if (xmlData == null)

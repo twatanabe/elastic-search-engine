@@ -62,6 +62,8 @@ namespace ElasticSerchEngine.Services
 
                     var response = client.CreateIndex(_elasticConfig.IndexName, i => indexDescriptor);
 
+                    _storageService.DeleteXMLDataMemory();
+
                     //_logger.LogTrace($"Bulk Index - {response.IsValid}");
                 }
                 catch (Exception ex)

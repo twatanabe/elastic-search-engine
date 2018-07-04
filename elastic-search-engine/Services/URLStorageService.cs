@@ -42,6 +42,11 @@ namespace ElasticSerchEngine.Services
             //}
         }
 
+        public void DeleteXMLDataMemory()
+        {
+            xmlData = null;
+        }
+
         public string GetDefaultXMLData()
         {
             if (xmlData == null)
