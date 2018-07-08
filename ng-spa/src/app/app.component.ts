@@ -1,7 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import {debounceTime, distinctUntilChanged, map, tap, switchMap} from 'rxjs/operators';
 
 import { Dict, Result, SearchResultModel } from './Model/search-result-model';
+import { Observable, Subscriber } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +27,7 @@ export class AppComponent implements OnInit {
   message: string;
   tag: string;
   count: number;
-  query: string;
+  queryWord: string;
   isLoading: boolean;
 
   aggs: Dict;
@@ -34,6 +36,7 @@ export class AppComponent implements OnInit {
 
   searchResults: SearchResultModel;
   suggested: any;
+  autoCompleteList: Array<string>;
 
   ngOnInit() {
     this.item = 'item';
@@ -53,9 +56,13 @@ export class AppComponent implements OnInit {
     // this.suggest();
   }
 
+  getAutoComplete = (text: Observable<string>) =>
+    text.pipe(debounceTime(300), distinctUntilChanged(),
+        switchMap(term => this.autoComplete(term)))
+
   search() {
     this._httpService
-      .get(`/api/search/search?query=${this.query}`)
+      .get(`/api/search/search?query=${this.queryWord}`)
       .subscribe(values => {
         this.isLoading = false;
         this.searchResults = values as SearchResultModel;
@@ -78,10 +85,21 @@ export class AppComponent implements OnInit {
 
   suggest() {
     this._httpService
-      .get(`/api/search/suggest?query=${this.query}`)
+      .get(`/api/search/suggest?query=${this.queryWord}`)
       .subscribe(values => {
         this.suggested = values;
       });
+  }
+
+  autoComplete(query: string) {
+    if (query.length < 1) {
+      return Observable.create(() => []).pipe(map(response => response));
+    }
+
+    const words = this.queryWord.split('.');
+    const currentWord = words[words.length - 1];
+
+    return this._httpService.get<string[]>('/api/search/autocomplete?q=' + currentWord).pipe(map(response => response));
   }
 
   mapData() {

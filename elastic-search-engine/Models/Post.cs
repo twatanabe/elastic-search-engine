@@ -15,7 +15,6 @@ namespace ElasticSerchEngine.Models
 
         [Keyword(Index = true)]
         public IEnumerable<string> Tags { get; set; }
-        [Completion]
-        public IEnumerable<string> Suggest { get; set; }
+        public CompletionField Suggest { get; set; }
     }
 }

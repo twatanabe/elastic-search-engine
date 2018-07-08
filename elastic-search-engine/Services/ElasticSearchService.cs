@@ -27,7 +27,7 @@ namespace ElasticSearchEngine.Services
                                 .Fields(f1 => f1.Title, f2 => f2.Body, f3 => f3.Tags))))
                 .Aggregations(aggs => aggs
                     .Terms("by_tags", t => t
-                        .Field(f => f.Tags).Size(10)))
+                        .Field(f => f.Tags).Size(20)))
                 .Size(pageSize));
 
             return new SearchResult<Post>
@@ -72,15 +72,18 @@ namespace ElasticSearchEngine.Services
 
         public IEnumerable<string> Autocomplete(string query)
         {
-            var result = client.Search<Post>(s => s.Query(q => q.MultiMatch(mp => mp.Query(query)))
-                .Suggest(sug => sug
-                    .Completion("tag-suggestions", c => c.Field(f => f.Tags))));
+            var result = client.Search<Post>(s => s
+                .Suggest(sg => sg
+                    .Completion("tag-suggestions", c => c
+                        .Field(f => f.Suggest).Prefix(query).Fuzzy(f => f.Fuzziness(Fuzziness.Auto)).SkipDuplicates().Size(100))));
 
-            return result.Suggest["tag-suggestions"].SelectMany(x => x.Options).Select(y => y.Text);
+            return result.Suggest["tag-suggestions"].SelectMany(x => x.Options).Select(y => y.Text).ToList();
         }
 
         public IEnumerable<string> Suggest(string query)
         {
+            var xxx = client.Search<Post>(s => s.Index<Post>().Source(so => so.Includes(f => f.Field(ff => ff.Tags)))
+                        .Suggest(su => su.Completion("post-suggestions", cs => cs.Field(f => f.Suggest).Prefix(query))).Size(10));
             var result = client.Search<Post>(s => s.Query(q => q.MultiMatch(mp => mp.Query(query)))
                 .Suggest(sug => sug
                     .Completion("post-suggestions", c => c.Field(f => f.Body).Field(f => f.Title).Field(f => f.Tags).Size(6))));

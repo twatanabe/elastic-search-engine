@@ -29,11 +29,11 @@ namespace ElasticSearchEngine
         {
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddTransient<IElasticConfig, ElasticConfig>();
-            //services.AddSingleton<IStorageService, AzureBlobService>();
+            services.AddSingleton<IStorageService, AzureBlobService>();
             //services.AddSingleton<IStorageService, URLStorageService>();
-            services.AddSingleton<IStorageService, FTPStorageService>();
-            services.AddTransient<IIndexService, ElasticIndexService>();
-            services.AddTransient<ISearchService<Post>, ElasticSearchService>();
+            //services.AddSingleton<IStorageService, FTPStorageService>();
+            services.AddSingleton<IIndexService, ElasticIndexService>();
+            services.AddSingleton<ISearchService<Post>, ElasticSearchService>();
 
             services.AddMvc();
         }
@@ -41,11 +41,6 @@ namespace ElasticSearchEngine
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hey Earth");
-            //}); 
-
             app.Use(async (context, next) =>
             {
                 await next();

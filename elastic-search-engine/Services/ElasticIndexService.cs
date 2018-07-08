@@ -31,6 +31,8 @@ namespace ElasticSerchEngine.Services
             _storageService = storageService;
 
             _logger = logger;
+
+            CreateIndex(1000);
         }
 
         public bool CanBeQueried()
@@ -59,12 +61,6 @@ namespace ElasticSerchEngine.Services
                     var indexResponse = client.CreateIndex(_elasticConfig.IndexName, idx => indexDescriptor);
                     _logger.LogTrace($"Create Index - {indexResponse.IsValid}");
 
-
-                    var response = client.CreateIndex(_elasticConfig.IndexName, i => indexDescriptor);
-
-                    _storageService.DeleteXMLDataMemory();
-
-                    //_logger.LogTrace($"Bulk Index - {response.IsValid}");
                 }
                 catch (Exception ex)
                 {
@@ -72,15 +68,17 @@ namespace ElasticSerchEngine.Services
                     throw ex;
                 }
 
-                int take = maxItems;
-                int batch = 1000;
+                _storageService.DeleteXMLDataMemory();
+            }
 
-                var defaultXMLData = _storageService.GetDefaultXMLData();
+            int take = maxItems;
+            int batch = 1000;
 
-                foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
-                {
-                    var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
-                }
+            var defaultXMLData = _storageService.GetDefaultXMLData();
+
+            foreach (var batches in LoadPostsFromData(defaultXMLData).Take(take).DoBatch(batch))
+            {
+                var result = client.IndexMany<Post>(batches, _elasticConfig.IndexName);
             }
 
             //foreach (var batches in LoadPostsFromFile("Data/Posts.xml").Take(take).DoBatch(batch))
@@ -119,6 +117,7 @@ namespace ElasticSerchEngine.Services
         //    }
         //}
 
+        private List<string> allTags = new List<string>();
         private IEnumerable<Post> LoadPostsFromData(string data)
         {
             string _byteOrderMarkUtf8 = Encoding.UTF8.GetString(Encoding.UTF8.GetPreamble());
@@ -155,7 +154,17 @@ namespace ElasticSerchEngine.Services
                                                 .Replace("&gt;", "")
                                                 .Split('|') : null
                                 };
-                                post.Suggest = post.Tags;
+
+                                //foreach (var tag in post.Tags)
+                                //{
+                                //    if (!allTags.Contains(tag))
+                                //    {
+                                //        noDupTags = 
+                                //        post.Suggest = new CompletionField { Input = new};
+                                //    }
+                                //}
+                                post.Suggest = new CompletionField { Input = post.Tags };
+                                //allTags.Concat(post.Tags);
                                 yield return post;
                             }
                         }

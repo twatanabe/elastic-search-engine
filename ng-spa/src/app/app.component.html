@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <form #searchForm="ngForm" (ngSubmit)="search()">
           <div class="input-group">
-            <input class="form-control" autofocus type="text" placeholder="Search for..." [(ngModel)]="query" name="query">
+            <input class="form-control" autofocus type="text" placeholder="Search for..." [(ngModel)]="queryWord" name="queryWord" [ngbTypeahead]="getAutoComplete">
             <span class="input-group-btn">
               <button class="btn btn-default btn-search" type="submit">
                 Search
@@ -31,20 +31,21 @@
         <!-- <h4 ng-show="message">{{message}}</h4> -->
       </div>
     </div>
+    <br/>
     <div class="row">
-        <div class="col-sm-2 col-xs-3">
+        <div class="col-sm-3 col-xs-3">
             <div *ngIf="total > 0">
                 <h4>Posts by tag</h4>
                 <ul class="category-list">
                     <li *ngFor="let tag of aggKeys">
-                        <span ng-class="{'label-primary label': isActive(tag)}">
+                        <span class="label-primary label">
                             <a (click)="toggleFilters(tag)">{{tag}}</a>
-                        </span><small class="pull-right"> ({{getValue(tag)}})</small>
+                        </span><small class="float-right"> ({{getValue(tag)}})</small>
                     </li>
                 </ul>
             </div>
         </div>
-      <div class="col-sm-9 col-sm-offset-1">
+      <div class="col-sm-9 col-sm-offset-1 result-container">
         <ng-template ngFor let-result [ngForOf]="results" *ngIf="!isLoading">
           <div class="row margin-bottom-small">
             <div class="col-md-12">
@@ -57,7 +58,7 @@
               </div>
               <div class="row">
                 <div class="col-md-12">
-                  <p>{{result.body}}</p>
+                  <p class="result-body">{{result.body}}</p>
                 </div>
               </div>
               <div class="row">

@@ -22,7 +22,6 @@ namespace ElasticSearchEngine
             _searchService = searchService;
             _logger = logger;
 
-            _indexService.CreateIndex(1000);
         }
 
         // GET: api/search
@@ -88,7 +87,8 @@ namespace ElasticSearchEngine
         [Route("autocomplete")]
         public ActionResult Autocomplete(string q)
         {
-            return Ok(_searchService.Autocomplete(q));
+            var x = _searchService.Autocomplete(q);
+            return Ok(x);
         }
 
         [HttpGet]

@@ -31,7 +31,7 @@ a{
 }
 
 .margin-bottom-small {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .category-list, .sugestion-list{
@@ -61,4 +61,16 @@ a{
 .sugestion-list li{
   display: inline-block;
   padding-right: 15px;
+}
+
+a {
+  color: #007bff !important;
+}
+
+.result-container {
+  padding-left: 100px;
+}
+
+.result-body {
+  margin-bottom: 5px;
 }
