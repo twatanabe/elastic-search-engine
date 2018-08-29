@@ -67,7 +67,7 @@ namespace ElasticSearchEngine
 
         [HttpGet]
         [Route("index")]
-        public ActionResult Index(int maxItesm = 1000)
+        public ActionResult Index(int maxItesm = 100000)
         {
             try
             {
