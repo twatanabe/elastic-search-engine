@@ -40,7 +40,7 @@
                 <ul class="category-list">
                     <li *ngFor="let tag of aggKeys">
                         <span class="label-primary label">
-                            <a (click)="toggleFilters(tag)">{{tag}}</a>
+                            <a (click)="searchTag(tag)">{{tag}}</a>
                         </span><small class="float-right"> ({{getValue(tag)}})</small>
                     </li>
                 </ul>

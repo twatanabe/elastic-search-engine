@@ -78,6 +78,7 @@ export class AppComponent implements OnInit {
       .get('/api/search/searchbycategory', { params: queryInfo })
       .subscribe(values => {
         this.isLoading = false;
+        this.queryWord = tags.join();
         this.searchResults = values as SearchResultModel;
         this.mapData();
       });
@@ -121,7 +122,7 @@ export class AppComponent implements OnInit {
     return this.aggs[key];
   }
 
-  toggleFilters(tag: string) {
+  searchTag(tag: string) {
     this.isLoading = true;
     const index = this.aggKeys.indexOf(tag);
     const tags = [tag];

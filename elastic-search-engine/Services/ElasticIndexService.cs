@@ -32,7 +32,7 @@ namespace ElasticSerchEngine.Services
 
             _logger = logger;
 
-            CreateIndex(1000);
+            CreateIndex(10000);
         }
 
         public bool CanBeQueried()
