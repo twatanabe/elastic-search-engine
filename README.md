@@ -1,13 +1,13 @@
 ### Elasticsearch StackExchange Search Engine
 
-Single Page App designed to query StackExchange articles using,
+Keyword search engine application designed to query StackExchange articles using
 - Elasticsearch 6.2.4
 - ASP.NET Core 2.1
 - Angular 6
 - NEST - Elasticsearch Client
 - Visual Studio Team Service
 - Azure App Service
-- Azure Blob Service
+- Azure Blob Storage
 - StackExchange XML Dumps
 - Bonsai Elasticsearch Host
 
